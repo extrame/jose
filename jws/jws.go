@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/SermoDigital/jose"
-	"github.com/SermoDigital/jose/crypto"
+	"github.com/extrame/jose"
+	"github.com/extrame/jose/crypto"
 )
 
 // JWS implements a JWS per RFC 7515.

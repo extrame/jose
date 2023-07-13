@@ -3,7 +3,7 @@ package jwt
 import (
 	"time"
 
-	"github.com/SermoDigital/jose/crypto"
+	"github.com/extrame/jose/crypto"
 )
 
 // JWT represents a JWT per RFC 7519.
@@ -18,7 +18,12 @@ type JWT interface {
 	// Validate returns an error describing any issues found while
 	// validating the JWT. For info on the fn parameter, see the
 	// comment on ValidateFunc.
-	Validate(key interface{}, method crypto.SigningMethod, v ...*Validator) error
+	Validate(key interface{}, v ...*Validator) error
+
+	// Validate returns an error describing any issues found while
+	// validating the JWT. For info on the fn parameter, see the
+	// comment on ValidateFunc.
+	ValidateWithMethod(key interface{}, method crypto.SigningMethod, v ...*Validator) error
 
 	// Serialize serializes the JWT into its on-the-wire
 	// representation.
