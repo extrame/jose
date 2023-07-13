@@ -72,7 +72,28 @@ func (j *jws) IsJWT() bool {
 	return j.isJWT
 }
 
-func (j *jws) Validate(key interface{}, m crypto.SigningMethod, v ...*jwt.Validator) error {
+func (j *jws) Validate(key interface{}, v ...*jwt.Validator) error {
+	if j.isJWT {
+		var m = j.sb[0].method
+		if err := j.Verify(key, m); err != nil {
+			return err
+		}
+		var v1 jwt.Validator
+		if len(v) > 0 {
+			v1 = *v[0]
+		}
+		c, ok := j.payload.v.(Claims)
+		if ok {
+			if err := v1.Validate(j); err != nil {
+				return err
+			}
+			return jwt.Claims(c).Validate(jose.Now(), v1.EXP, v1.NBF)
+		}
+	}
+	return ErrIsNotJWT
+}
+
+func (j *jws) ValidateWithMethod(key interface{}, m crypto.SigningMethod, v ...*jwt.Validator) error {
 	if j.isJWT {
 		if err := j.Verify(key, m); err != nil {
 			return err
